@@ -24,7 +24,7 @@ $(function() {
 
         /* Loops through each feed in the allFeeds object and
          * ensures it has a URL defined
-         * and that the URL is not empty.
+         * and that the URL is not an empty string.
          */
 
         it('have valid URLs', function(){
@@ -37,7 +37,7 @@ $(function() {
 
         /* Loops through each feed in the allFeeds object and
          * ensures it has a name defined
-         * and that the name is not empty.
+         * and that the name is not an empty string
          */
          it('have valid names', function(){
             for(var i = 0; i < allFeeds.length; i++){
@@ -93,9 +93,8 @@ $(function() {
          * Remember, loadFeed() is asynchronous so this test will require
          * the use of Jasmine's beforeEach and asynchronous done() function.
          */
-        it('are loaded when loadFeed is called', function(done){
+        it('are loaded when loadFeed is called', function(){
             expect($('.feed .entry').length).toBeGreaterThan(0);
-            done();
         });
 
         /* Check that links are inserted correctly for each entry
@@ -112,9 +111,10 @@ $(function() {
         var original;
 
         beforeEach(function(done){
-            loadFeed(0, done);
-            original = $('.feed').html();
-            //save whatever is in feed after initial load
+            loadFeed(0, function(){
+                original = $('.feed').html();
+                done();
+            });
         });
 
         it('is loaded when loadFeed is called', function(done){
@@ -140,7 +140,7 @@ $(function() {
             id = addFeed('name','url');
         });
 
-        //check functionality of adding a new fee to array of feeds
+        //check functionality of adding a new feed to array of feeds
         it('can add a new feed', function(){
             expect(id).toBeDefined();
             expect(allFeeds[id]).toBeDefined();
